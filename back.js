@@ -4,8 +4,8 @@ const btx = background.getContext("2d");
 background.width = innerWidth;
 background.height = innerHeight;
 
-const stageWidth = 900;
-const stageHeight = 900;
+const stageWidth = 800;
+const stageHeight = 800;
 const stageX = background.width / 2 - stageWidth / 2;
 const stageY = background.height / 2 - stageHeight / 2;
 
@@ -16,10 +16,14 @@ for (let i = 50; i < stageHeight; i += 50) {
   }
 }
 
+btx.save();
+btx.shadowBlur = 10;
+btx.shadowColor = "black";
 btx.fillStyle = "#11AD3E";
 btx.rect(stageX, stageY, stageWidth, stageHeight);
 btx.fill();
 btx.stroke();
+btx.restore();
 
 points.forEach((point) => {
   btx.fillStyle = "black";

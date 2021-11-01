@@ -20,6 +20,7 @@ addEventListener("mousemove", (e) => {
   mouse.x = e.x;
   mouse.y = e.y;
 });
+
 addEventListener("mousedown", (e) => {
   //클릭 한 곳에 좌표 추가
   points.forEach((point) => {
@@ -34,13 +35,16 @@ addEventListener("mousedown", (e) => {
   });
   mouse.count++;
 });
+
+const zInfoBox = document.getElementById("z-info-box");
 addEventListener("keydown", (e) => {
-  if (e.key === "ArrowDown" && zIndex > -8) {
+  if (e.key === "ArrowDown" && zIndex > -7) {
     zIndex--;
   }
-  if (e.key === "ArrowUp" && zIndex < 8) {
+  if (e.key === "ArrowUp" && zIndex < 7) {
     zIndex++;
   }
+  zInfoBox.innerHTML = zIndex;
   console.log(zIndex);
 });
 
