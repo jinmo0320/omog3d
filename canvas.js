@@ -1,4 +1,4 @@
-import { points } from "./back.js";
+import { points, stageWidth, stageX, stageY } from "./back.js";
 import { getDis } from "./getDis.js";
 
 const canvas = document.getElementById("canvas");
@@ -10,7 +10,6 @@ canvas.height = innerHeight;
 let mouse = {
   x: undefined,
   y: undefined,
-  count: 0,
 };
 
 let filledPoints = [];
@@ -25,15 +24,22 @@ addEventListener("mousedown", (e) => {
   //클릭 한 곳에 좌표 추가
   points.forEach((point) => {
     if (getDis(mouse.x, mouse.y, point.x, point.y) < 25) {
-      filledPoints.push({
-        x: point.x,
-        y: point.y,
-        z: zIndex,
-        color: mouse.count % 2 === 0 ? "black" : "white",
+      let isFilled = false;
+      filledPoints.forEach((stone) => {
+        if (stone.x === point.x && stone.y === point.y && stone.z === zIndex) {
+          isFilled = true;
+        }
       });
+      if (!isFilled) {
+        filledPoints.push({
+          x: point.x,
+          y: point.y,
+          z: zIndex,
+          color: filledPoints.length % 2 === 0 ? "black" : "white",
+        });
+      }
     }
   });
-  mouse.count++;
 });
 
 const zInfoBox = document.getElementById("z-info-box");
@@ -45,20 +51,35 @@ addEventListener("keydown", (e) => {
     zIndex++;
   }
   zInfoBox.innerHTML = zIndex;
-  console.log(zIndex);
+});
+let onZ = false;
+addEventListener("keydown", (e) => {
+  if (e.key === "z") {
+    onZ = true;
+  }
+});
+addEventListener("keyup", (e) => {
+  if (e.key === "z") {
+    onZ = false;
+  }
 });
 
 function animate() {
   requestAnimationFrame(animate);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  //마우스 위치 표시
+  //마우스 위치 표시 && z 눌렀을 때
   points.forEach((point) => {
     if (getDis(mouse.x, mouse.y, point.x, point.y) < 25) {
-      ctx.fillStyle = "rgba(0,0,255, 0.3)";
-      ctx.beginPath();
-      ctx.arc(point.x, point.y, 22, 0, Math.PI * 2);
-      ctx.fill();
+      if (onZ) {
+        ctx.fillStyle = "rgba(0,0,255, 0.3)";
+        ctx.fillRect(stageX, point.y - 25, stageWidth, 50);
+      } else {
+        ctx.fillStyle = "rgba(0,0,255, 0.3)";
+        ctx.beginPath();
+        ctx.arc(point.x, point.y, 22, 0, Math.PI * 2);
+        ctx.fill();
+      }
     }
   });
 

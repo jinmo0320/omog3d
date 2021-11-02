@@ -32,4 +32,4 @@ points.forEach((point) => {
   btx.fill();
 });
 
-export { points };
+export { points, stageX, stageY, stageWidth, stageHeight };
