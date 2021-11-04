@@ -1,5 +1,6 @@
 import { points, stageWidth, stageX, stageY } from "./back.js";
 import { getDis } from "./getDis.js";
+import { verdict } from "./verdict.js";
 
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
@@ -20,6 +21,8 @@ addEventListener("mousemove", (e) => {
   mouse.y = e.y;
 });
 
+const winBox = document.getElementById("win-box");
+
 addEventListener("mousedown", (e) => {
   //클릭 한 곳에 좌표 추가
   points.forEach((point) => {
@@ -36,13 +39,24 @@ addEventListener("mousedown", (e) => {
           y: point.y,
           z: zIndex,
           color: filledPoints.length % 2 === 0 ? "black" : "white",
+          coordinate: [point.coordinate[0], point.coordinate[1], zIndex],
         });
       }
     }
   });
+
+  if (
+    verdict(filledPoints, filledPoints.length % 2 === 1 ? "black" : "white") ===
+    "win"
+  ) {
+    winBox.style.display = "flex";
+  }
 });
 
 const zInfoBox = document.getElementById("z-info-box");
+zInfoBox.style.top = stageY + "px";
+zInfoBox.style.left = stageX + "px";
+
 addEventListener("keydown", (e) => {
   if (e.key === "ArrowDown" && zIndex > -7) {
     zIndex--;
@@ -71,15 +85,10 @@ function animate() {
   //마우스 위치 표시 && z 눌렀을 때
   points.forEach((point) => {
     if (getDis(mouse.x, mouse.y, point.x, point.y) < 25) {
-      if (onZ) {
-        ctx.fillStyle = "rgba(0,0,255, 0.3)";
-        ctx.fillRect(stageX, point.y - 25, stageWidth, 50);
-      } else {
-        ctx.fillStyle = "rgba(0,0,255, 0.3)";
-        ctx.beginPath();
-        ctx.arc(point.x, point.y, 22, 0, Math.PI * 2);
-        ctx.fill();
-      }
+      ctx.fillStyle = "rgba(0,0,255, 0.3)";
+      ctx.beginPath();
+      ctx.arc(point.x, point.y, 22, 0, Math.PI * 2);
+      ctx.fill();
     }
   });
 

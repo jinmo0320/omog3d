@@ -10,9 +10,13 @@ const stageX = background.width / 2 - stageWidth / 2;
 const stageY = background.height / 2 - stageHeight / 2;
 
 let points = [];
-for (let i = 50; i < stageHeight; i += 50) {
-  for (let j = 50; j < stageWidth; j += 50) {
-    points.push({ x: j + stageX, y: i + stageY });
+for (let i = 0; i < stageHeight / 50 - 1; i++) {
+  for (let j = 0; j < stageWidth / 50 - 1; j++) {
+    points.push({
+      x: 50 + 50 * j + stageX,
+      y: 50 + 50 * i + stageY,
+      coordinate: [j - 7, i - 7 === 0 ? 0 : -1 * (i - 7)],
+    });
   }
 }
 
